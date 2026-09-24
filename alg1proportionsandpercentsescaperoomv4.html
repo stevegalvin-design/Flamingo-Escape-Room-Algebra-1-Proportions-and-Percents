@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Wife Told Me to Stop Acting Like a Flamingo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #ff1493;
+      --lime: #39ff14;
+      --teal: #0d7775;
+      --deep-teal: #0a2a2a;
+      --navy: #0a0a1a;
+      --panel: #0d1f1f;
+      --white: #f8ffff;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: var(--white);
+      background: linear-gradient(160deg, #0a2a2a 0%, #0a0a1a 100%);
+      font-family: Roboto, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      left: -5%;
+      right: -5%;
+      bottom: -2px;
+      height: 105px;
+      pointer-events: none;
+      opacity: .5;
+      background:
+        radial-gradient(70px 28px at 8% 100%, transparent 62%, rgba(57,255,20,.24) 64% 72%, transparent 74%),
+        radial-gradient(105px 35px at 28% 100%, transparent 62%, rgba(0,213,196,.27) 64% 72%, transparent 74%),
+        radial-gradient(85px 30px at 52% 100%, transparent 62%, rgba(57,255,20,.20) 64% 72%, transparent 74%),
+        radial-gradient(120px 38px at 78% 100%, transparent 62%, rgba(0,213,196,.25) 64% 72%, transparent 74%),
+        linear-gradient(to top, rgba(0,213,196,.18), transparent 70%);
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+
+    .screen {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+    }
+
+    #titleScreen {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 42px;
+      isolation: isolate;
+      background-image:
+        linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+        url('https://fcsqbqyomghwjhlnmvgn.supabase.co/storage/v1/object/public/attachments/4eaf990f-bd8e-44b0-a099-4def887e292a.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    #titleScreen::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 58px;
+      background:
+        radial-gradient(16px 40px at 8% 0, var(--pink) 60%, transparent 63%),
+        radial-gradient(13px 31px at 23% 0, var(--lime) 60%, transparent 63%),
+        radial-gradient(18px 47px at 43% 0, var(--pink) 60%, transparent 63%),
+        radial-gradient(12px 35px at 67% 0, var(--lime) 60%, transparent 63%),
+        radial-gradient(17px 42px at 88% 0, var(--pink) 60%, transparent 63%);
+    }
+
+    .title-grid {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 480px);
+      align-items: center;
+      gap: clamp(28px, 6vw, 90px);
+    }
+
+    .title-copy { transform: rotate(-2deg); }
+    .title-copy h1 {
+      margin: 0 0 28px;
+      max-width: 680px;
+      color: var(--pink);
+      font-family: Bangers, Impact, sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      line-height: .92;
+      letter-spacing: 2px;
+      text-shadow:
+        5px 5px 0 var(--lime),
+        9px 9px 0 rgba(0,0,0,.72);
+    }
+
+    .flamingo-wrap {
+      display: grid;
+      place-items: center;
+      min-height: 390px;
+    }
+
+    .flamingo-wrap img {
+      width: min(100%, 480px);
+      min-width: 380px;
+      max-height: 560px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 18px var(--pink)) drop-shadow(0 0 34px rgba(255,20,147,.75));
+    }
+
+    .start-btn, .action-btn {
+      border: 4px solid var(--lime);
+      border-radius: 12px;
+      padding: 13px 30px;
+      color: #111;
+      background: var(--pink);
+      font-family: Bangers, Impact, sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      box-shadow: 0 0 13px var(--pink), 0 0 28px rgba(57,255,20,.65);
+      transition: transform .15s ease, filter .15s ease;
+    }
+
+    .start-btn:hover, .action-btn:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.18); }
+
+    #gameScreen { padding: 22px 18px 120px; }
+    .game-shell { width: min(1100px, 100%); margin: 0 auto; }
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 16px;
+      padding: 8px 4px;
+    }
+    .game-header h1 {
+      margin: 0;
+      color: var(--pink);
+      font-family: Bangers, Impact, sans-serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      letter-spacing: 2px;
+      text-shadow: 3px 3px 0 var(--lime);
+    }
+    .timer {
+      min-width: 112px;
+      padding: 9px 14px;
+      border: 2px solid var(--lime);
+      border-radius: 10px;
+      color: var(--lime);
+      background: rgba(0,0,0,.3);
+      font-family: Bangers, Impact, sans-serif;
+      font-size: 2rem;
+      text-align: center;
+      box-shadow: 0 0 12px rgba(57,255,20,.35);
+    }
+
+    .drips {
+      height: 36px;
+      margin: -22px -18px 18px;
+      background:
+        radial-gradient(18px 32px at 9% 0, var(--pink) 60%, transparent 63%),
+        radial-gradient(14px 25px at 27% 0, var(--teal) 60%, transparent 63%),
+        radial-gradient(19px 34px at 49% 0, var(--pink) 60%, transparent 63%),
+        radial-gradient(13px 26px at 70% 0, var(--teal) 60%, transparent 63%),
+        radial-gradient(17px 31px at 91% 0, var(--pink) 60%, transparent 63%);
+    }
+
+    .punchline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 16px 0 22px;
+    }
+    .slot {
+      min-width: 82px;
+      padding: 8px 14px;
+      border: 3px solid var(--lime);
+      border-radius: 8px;
+      color: var(--lime);
+      background: rgba(0,0,0,.28);
+      font-family: Bangers, Impact, sans-serif;
+      font-size: 1.7rem;
+      text-align: center;
+    }
+    .slot.filled {
+      color: #071313;
+      background: linear-gradient(135deg, #0bd7c4, var(--lime));
+      animation: bounce .55s ease;
+    }
+    @keyframes bounce { 0% { transform: scale(.7); } 65% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+    .room-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .room-nav button {
+      border: 2px solid var(--lime);
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: #111;
+      background: var(--pink);
+      font-family: Bangers, Impact, sans-serif;
+      font-size: 1.15rem;
+    }
+    .room-nav button.completed { background: var(--lime); }
+    .room-nav button.locked { color: #aaa; border-color: #555; background: #333; cursor: not-allowed; }
+    .room-nav button.current { box-shadow: 0 0 12px var(--pink); }
+
+    .room-card {
+      border: 3px solid var(--pink);
+      border-radius: 18px;
+      padding: clamp(18px, 4vw, 34px);
+      background: rgba(13,31,31,.93);
+      box-shadow: 0 0 16px rgba(255,20,147,.75), inset 0 0 24px rgba(0,213,196,.12);
+    }
+    .room-card h2, .room-card h3 {
+      margin-top: 0;
+      color: var(--lime);
+      font-family: Bangers, Impact, sans-serif;
+      letter-spacing: 1px;
+    }
+    .room-card h2 { font-size: 2.7rem; }
+    .room-card h3 { font-size: 1.7rem; }
+    .problem {
+      margin: 16px 0;
+      padding: 17px;
+      border: 1px solid rgba(57,255,20,.45);
+      border-radius: 10px;
+      background: rgba(0,0,0,.22);
+    }
+    .problem p { margin: 0 0 12px; line-height: 1.5; }
+    .equation {
+      margin: 12px 0;
+      color: var(--pink);
+      font-size: clamp(1.45rem, 3vw, 2.15rem);
+      font-weight: 700;
+      text-align: center;
+    }
+    .frac { display: inline-flex; flex-direction: column; vertical-align: middle; line-height: 1; text-align: center; min-width: 58px; }
+    .frac .num { border-bottom: 2px solid currentColor; padding: 0 7px 4px; }
+    .frac .den { padding: 4px 7px 0; }
+    .answer-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .answer-row input {
+      flex: 1 1 170px;
+      min-width: 0;
+      border: 2px solid var(--teal);
+      border-radius: 7px;
+      padding: 11px;
+      color: var(--white);
+      background: #071313;
+      outline: none;
+    }
+    .answer-row input:focus { border-color: var(--lime); box-shadow: 0 0 7px var(--lime); }
+    .check-btn { padding: 10px 18px; font-size: 1.25rem; }
+    .feedback { min-height: 22px; margin-top: 8px; font-weight: 700; }
+    .feedback.correct { color: var(--lime); }
+    .feedback.wrong { color: var(--pink); }
+    .unlock-wrap { display: flex; justify-content: center; margin-top: 24px; }
+    .unlock-btn { font-size: 1.5rem; }
+    .unlock-btn:disabled { cursor: not-allowed; opacity: .45; filter: grayscale(.8); }
+
+    .overlay {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(2,18,18,.9);
+    }
+    .celebration {
+      position: relative;
+      width: min(680px, 100%);
+      padding: 42px 24px;
+      border: 4px solid var(--lime);
+      border-radius: 20px;
+      background: #062323;
+      text-align: center;
+      box-shadow: 0 0 25px var(--pink), inset 0 0 30px rgba(0,213,196,.2);
+      overflow: hidden;
+    }
+    .celebration h2 { margin: 0 0 14px; color: var(--pink); font-family: Bangers, Impact, sans-serif; font-size: clamp(3rem, 8vw, 5.5rem); text-shadow: 4px 4px 0 var(--lime); }
+    .celebration .final-line { margin: 8px 0 28px; color: var(--lime); font-family: Bangers, Impact, sans-serif; font-size: clamp(2.2rem, 6vw, 4rem); letter-spacing: 2px; }
+    .confetti { position: absolute; inset: 0; pointer-events: none; }
+    .confetti i { position: absolute; width: 10px; height: 23px; background: var(--pink); animation: fall 2.5s linear infinite; }
+    .confetti i:nth-child(even) { background: var(--lime); }
+    .confetti i:nth-child(1) { left: 8%; animation-delay: -.2s; }
+    .confetti i:nth-child(2) { left: 19%; animation-delay: -.8s; }
+    .confetti i:nth-child(3) { left: 33%; animation-delay: -1.4s; }
+    .confetti i:nth-child(4) { left: 48%; animation-delay: -.5s; }
+    .confetti i:nth-child(5) { left: 63%; animation-delay: -1.8s; }
+    .confetti i:nth-child(6) { left: 79%; animation-delay: -1s; }
+    .confetti i:nth-child(7) { left: 91%; animation-delay: -2.1s; }
+    @keyframes fall { from { transform: translateY(-80px) rotate(0deg); } to { transform: translateY(620px) rotate(540deg); } }
+
+    @media (max-width: 780px) {
+      #titleScreen { padding: 28px 18px; }
+      .title-grid { grid-template-columns: 1fr; text-align: center; gap: 15px; }
+      .title-copy h1 { margin-left: auto; margin-right: auto; }
+      .flamingo-wrap { min-height: 260px; }
+      .flamingo-wrap img { min-width: 0; width: min(90vw, 420px); max-height: 360px; }
+      .game-header { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <section id="titleScreen" class="screen">
+    <div class="title-grid">
+      <div class="title-copy">
+        <h1>My Wife Told Me to Stop Acting Like a Flamingo.</h1>
+        <button id="startBtn" class="start-btn" type="button">START</button>
+      </div>
+      <div class="flamingo-wrap">
+        <img src="https://fcsqbqyomghwjhlnmvgn.supabase.co/storage/v1/object/public/attachments/ab3c6c40-361b-4bd0-bf06-2592f6466a78.png" alt="Flamingo illustration" />
+      </div>
+    </div>
+  </section>
+
+  <section id="gameScreen" class="screen hidden">
+    <div class="game-shell">
+      <div class="drips" aria-hidden="true"></div>
+      <header class="game-header">
+        <h1>Escape Room</h1>
+        <div id="timer" class="timer" aria-live="polite">20:00</div>
+      </header>
+      <div id="punchline" class="punchline" aria-label="Punchline progress"></div>
+      <nav id="roomNav" class="room-nav" aria-label="Room navigation"></nav>
+      <main id="roomCard" class="room-card"></main>
+    </div>
+  </section>
+
+  <div id="celebrationOverlay" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="celebration">
+      <div class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <h2>YOU ESCAPED! 🦩</h2>
+      <div class="final-line">I PUT MY FOOT DOWN.</div>
+      <button id="playAgainBtn" class="action-btn" type="button">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <script>
+    const rooms = [
+      {
+        title: 'Room 1 — Medium Proportions', code: 'I',
+        problems: [
+          { prompt: 'Solve:', equation: '<span class="frac"><span class="num">3x + 2</span><span class="den">8</span></span> = <span class="frac"><span class="num">23</span><span class="den">8</span></span>', answer: '7' },
+          { prompt: 'Solve:', equation: '<span class="frac"><span class="num">x − 1</span><span class="den">4</span></span> = <span class="frac"><span class="num">2</span><span class="den">1</span></span>', answer: '9' }
+        ]
+      },
+      {
+        title: 'Room 2 — Hard Proportions', code: 'PUT',
+        problems: [
+          { prompt: 'Solve:', equation: '<span class="frac"><span class="num">4x − 3</span><span class="den">2x + 1</span></span> = <span class="frac"><span class="num">5</span><span class="den">3</span></span>', answer: '7' },
+          { prompt: 'Solve:', equation: '<span class="frac"><span class="num">5x − 1</span><span class="den">x + 3</span></span> = 3', answer: '5' }
+        ]
+      },
+      {
+        title: 'Room 3 — Harder Proportion Word Problems', code: 'MY',
+        problems: [
+          { prompt: 'A car travels 180 miles in 3 hours. At the same rate, how far will it travel in 7.5 hours?', answer: '450', units: ['miles'] },
+          { prompt: 'A factory produces 840 items in 6 hours. How many items will it produce in 9.5 hours?', answer: '1330', units: ['items'] },
+          { prompt: 'A recipe uses 3 cups of sugar for every 5 cups of flour. If a baker uses 20 cups of flour, how many cups of sugar are needed?', answer: '12', units: ['cups'] }
+        ]
+      },
+      {
+        title: 'Room 4 — Harder Percent Problems', code: 'FOOT',
+        problems: [
+          { prompt: 'A jacket originally costs $240. It is on sale for 35% off. What is the sale price?', answer: '156' },
+          { prompt: 'A student scored 68 out of 80 on a test. What percent did the student score?', answer: '85' },
+          { prompt: 'After a 15% increase, a number becomes 138. What was the original number?', answer: '120' },
+          { prompt: 'A store marks up an item by 40%, then offers a 20% discount on the marked-up price. If the original price was $50, what is the final price?', answer: '56' }
+        ]
+      },
+      {
+        title: 'Room 5 — Percent Word Problems', code: 'DOWN',
+        problems: [
+          { prompt: '25% of 48 students signed up for the talent show. How many students signed up?', answer: '12' },
+          { prompt: 'A school club has 50 members. Membership increases by 20%. Of the new total, 60% sign up for a spring trip. How many members sign up for the trip?', answer: '36' }
+        ]
+      }
+    ];
+
+    let currentRoom = 0;
+    let unlocked = 1;
+    let completed = [];
+    let timerId = null;
+    let secondsLeft = 20 * 60;
+
+    const titleScreen = document.getElementById('titleScreen');
+    const gameScreen = document.getElementById('gameScreen');
+    const roomCard = document.getElementById('roomCard');
+    const roomNav = document.getElementById('roomNav');
+    const punchline = document.getElementById('punchline');
+    const timer = document.getElementById('timer');
+    const celebrationOverlay = document.getElementById('celebrationOverlay');
+
+    function normalize(value) {
+      return String(value)
+        .toLowerCase()
+        .replace(/[$%,]/g, '')
+        .replace(/\b(miles|items|cups)\b/g, '')
+        .replace(/\s+/g, '')
+        .trim();
+    }
+
+    function startGame() {
+      titleScreen.classList.add('hidden');
+      gameScreen.classList.remove('hidden');
+      secondsLeft = 20 * 60;
+      unlocked = 1;
+      completed = [];
+      currentRoom = 0;
+      renderPunchline();
+      renderRoomNav();
+      renderRoom(0);
+      updateTimer();
+      clearInterval(timerId);
+      timerId = setInterval(() => {
+        secondsLeft--;
+        updateTimer();
+        if (secondsLeft <= 0) {
+          clearInterval(timerId);
+          timer.textContent = '00:00';
+          alert('Time is up! Try again.');
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const mins = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+      const secs = (secondsLeft % 60).toString().padStart(2, '0');
+      timer.textContent = `${mins}:${secs}`;
+    }
+
+    function renderPunchline() {
+      punchline.innerHTML = rooms.map((room, index) => {
+        const filled = completed.includes(index);
+        return `<span class="slot ${filled ? 'filled' : ''}">${filled ? room.code : '???'}</span>`;
+      }).join('');
+    }
+
+    function renderRoomNav() {
+      roomNav.innerHTML = rooms.map((room, index) => {
+        const isLocked = index + 1 > unlocked;
+        const isCompleted = completed.includes(index);
+        const current = index === currentRoom;
+        return `<button type="button" class="${isLocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''} ${current ? 'current' : ''}" data-room="${index}" ${isLocked ? 'disabled' : ''}>${isLocked ? '🔒 ' : ''}Room ${index + 1}</button>`;
+      }).join('');
+      roomNav.querySelectorAll('button:not([disabled])').forEach(button => {
+        button.addEventListener('click', () => {
+          currentRoom = Number(button.dataset.room);
+          renderRoom(currentRoom);
+          renderRoomNav();
+        });
+      });
+    }
+
+    function renderRoom(index) {
+      const room = rooms[index];
+      roomCard.innerHTML = `
+        <h2>${room.title}</h2>
+        <p>Answer every problem correctly to unlock this room and reveal a punchline word.</p>
+        ${room.problems.map((problem, problemIndex) => `
+          <section class="problem" data-problem="${problemIndex}">
+            <h3>Problem ${problemIndex + 1}</h3>
+            <p>${problem.prompt}</p>
+            ${problem.equation ? `<div class="equation">${problem.equation}</div>` : ''}
+            <div class="answer-row">
+              <input id="answer-${index}-${problemIndex}" type="text" inputmode="decimal" autocomplete="off" aria-label="Answer to problem ${problemIndex + 1}" />
+              <button class="action-btn check-btn" type="button" data-check="${problemIndex}">CHECK</button>
+            </div>
+            <div class="feedback" id="feedback-${index}-${problemIndex}" aria-live="polite"></div>
+          </section>
+        `).join('')}
+        <div class="unlock-wrap">
+          <button id="unlockBtn" class="action-btn unlock-btn" type="button" disabled>UNLOCK ROOM</button>
+        </div>
+      `;
+
+      const checkButtons = roomCard.querySelectorAll('[data-check]');
+      checkButtons.forEach(button => button.addEventListener('click', () => checkProblem(index, Number(button.dataset.check))));
+      roomCard.querySelector('#unlockBtn').addEventListener('click', () => unlockRoom(index));
+    }
+
+    function checkProblem(roomIndex, problemIndex) {
+      const problem = rooms[roomIndex].problems[problemIndex];
+      const input = document.getElementById(`answer-${roomIndex}-${problemIndex}`);
+      const feedback = document.getElementById(`feedback-${roomIndex}-${problemIndex}`);
+      const isCorrect = normalize(input.value) === normalize(problem.answer);
+      feedback.textContent = isCorrect ? 'Correct! ✓' : 'Not quite—try again.';
+      feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+      if (isCorrect) input.dataset.correct = 'true';
+      const allCorrect = rooms[roomIndex].problems.every((_, i) => document.getElementById(`answer-${roomIndex}-${i}`).dataset.correct === 'true');
+      document.getElementById('unlockBtn').disabled = !allCorrect;
+    }
+
+    function unlockRoom(index) {
+      if (!completed.includes(index)) completed.push(index);
+      if (index + 1 < rooms.length) unlocked = Math.max(unlocked, index + 2);
+      renderPunchline();
+      renderRoomNav();
+      if (index + 1 >= rooms.length) {
+        clearInterval(timerId);
+        celebrationOverlay.classList.remove('hidden');
+      } else {
+        currentRoom = index + 1;
+        renderRoom(currentRoom);
+        renderRoomNav();
+      }
+    }
+
+    function resetToTitle() {
+      clearInterval(timerId);
+      celebrationOverlay.classList.add('hidden');
+      gameScreen.classList.add('hidden');
+      titleScreen.classList.remove('hidden');
+    }
+
+    document.getElementById('startBtn').addEventListener('click', startGame);
+    document.getElementById('playAgainBtn').addEventListener('click', resetToTitle);
+  </script>
+</body>
+</html>
